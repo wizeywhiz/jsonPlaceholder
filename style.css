@@ -1,0 +1,38 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;    
+}
+
+body{
+    position:relative;
+}
+
+#nav-container{
+    width: 100vw;
+    height: 10vh;
+    background-color: #251E1E;
+    position: fixed;
+}
+
+aside{
+    position: fixed;
+    width: 25vw;
+    height: 86vh;
+    margin-top: 4px;
+    border-right: 2px solid rgb(35, 62, 71);
+    top: 10vh;
+    left: 0px;
+}
+
+#main-display{
+    position: absolute;
+    width: 70vw;
+    height: 86vh;
+    left: 26vw;
+    top: 12vh;
+    margin-top: 4px;
+    border: 1px solid rgb(202, 196, 196);
+    box-shadow: 3px 3px 5px 5px rgb(202, 196, 196);
+}
+
