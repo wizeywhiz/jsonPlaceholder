@@ -21,6 +21,7 @@ aside{
     height: 86vh;
     margin-top: 4px;
     border-right: 2px solid rgb(35, 62, 71);
+    padding: 5px;
     top: 10vh;
     left: 0px;
 }
@@ -32,7 +33,24 @@ aside{
     left: 26vw;
     top: 12vh;
     margin-top: 4px;
+    padding: 10px;
+    overflow-y: auto;
     border: 1px solid rgb(202, 196, 196);
-    box-shadow: 3px 3px 5px 5px rgb(202, 196, 196);
+    box-shadow: 3px 3px 30px 5px rgb(202, 196, 196);
+}
+
+.nav{
+    color: whitesmoke;
+    border-right: 1px solid whitesmoke;
+    border-left: 1px solid whitesmoke;
+    font-weight: 700;
+    font-size: 1.2rem;
+    padding: 20px;
+    margin: 20px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+#user{
+    color: #E1AC86;
 }
 
