@@ -53,4 +53,10 @@ aside{
 #user{
     color: #E1AC86;
 }
+.users-list{
+    background-color: aquamarine;
+    padding: 5px;
+    margin: 2px 5px;
+    height: 30px;
 
+}
