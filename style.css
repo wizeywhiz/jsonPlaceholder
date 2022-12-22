@@ -42,6 +42,7 @@ aside{
 #nav-container{
     color: whitesmoke;
     font-size: 1.2rem;
+    text-align: center;
 }
 .nav{    
     border-right: 1px solid whitesmoke;
@@ -51,16 +52,33 @@ aside{
     margin: 20px;
     padding-top: 0px;
     padding-bottom: 0px;
+    cursor: pointer;    
 }
 
 .active-nav{
     color: #E1AC86;
     font-size: 1.4rem;
 }
+
+
+.list {
+    background-color: rgb(35, 66, 78);
+    color: rgb(240, 231, 221);
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 5px;
+    margin: 2px 5px;
+    height: 50px;
+}
+.list > div {
+    display: flex;
+    justify-content: space-between;
+}
+
 .users-list{
     background-color: rgb(126, 203, 233);
     padding: 5px;
-    margin: 2px 5px;
+    margin: 8px 5px;
     height: 50px;
 
 }
