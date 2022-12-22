@@ -39,24 +39,36 @@ aside{
     box-shadow: 3px 3px 30px 5px rgb(202, 196, 196);
 }
 
-.nav{
+#nav-container{
     color: whitesmoke;
+    font-size: 1.2rem;
+}
+.nav{    
     border-right: 1px solid whitesmoke;
     border-left: 1px solid whitesmoke;
-    font-weight: 700;
-    font-size: 1.2rem;
+    font-weight: 700;    
     padding: 20px;
     margin: 20px;
     padding-top: 0px;
     padding-bottom: 0px;
 }
-#user{
+
+.active-nav{
     color: #E1AC86;
+    font-size: 1.4rem;
 }
 .users-list{
-    background-color: aquamarine;
+    background-color: rgb(126, 203, 233);
     padding: 5px;
     margin: 2px 5px;
-    height: 30px;
+    height: 50px;
 
+}
+
+.users-list > div{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 4px;
+    margin: 4px;
 }
