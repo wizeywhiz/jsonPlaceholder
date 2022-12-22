@@ -103,7 +103,7 @@ let Controller = {
 
         this.getData(Model.albumUrl).then(allAlbums => {
             console.log(allAlbums);
-        let albumList =  allAlbums.map(album =>  `<div class="list"><h3>${album.title}</h3><p>Album by user with Id: 
+        let albumList =  allAlbums.map(album =>  `<div class=" list album-list"><h3>${album.title}</h3><p>Album by user with Id: 
         ${album.userId}
         </p></div>`).join('');
         // displayDiv.innerHTML = albumList;
@@ -116,7 +116,7 @@ let Controller = {
     photos(){
         this.getData(Model.photoUrl).then(allPhoto => {
             console.log(allPhoto);
-        let photoList =  allPhoto.map(photo =>  `<div class="list"><h3>${photo.title}</h3><div><img src="${photo.thumbnailUrl}" alt="Pics not foung">
+        let photoList =  allPhoto.map(photo =>  `<div class="photo-list list"><h3>${photo.title}</h3><div><img src="${photo.thumbnailUrl}" alt="Pics not foung">
         </div></div>`).join('');
         displayDiv.innerHTML = '<div><h2>All Photo</h2></div>'+photoList;
         });
@@ -139,7 +139,7 @@ let Controller = {
     todos(){
         this.getData(Model.todoUrl).then(allTodo => {
             console.log(allTodo);
-        let todoList =  allTodo.map(todo =>  `<div class="list"><h3>${todo.title}</h3><p>Album by user with Id: 
+        let todoList =  allTodo.map(todo =>  `<div class="todo-list list"><h3>${todo.title}</h3><span class="${todo.completed?'completed':'uncompleted'}">${todo.completed?'&check;':'&times;'}</span><p>Todos by user with Id: 
         ${todo.userId}
         </p></div>`).join('');
         displayDiv.innerHTML = '<div><h2>All Todos</h2></div>'+todoList;             
