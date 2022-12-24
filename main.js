@@ -15,26 +15,26 @@ navLinks.addEventListener('click',(e)=>{
     switch (e.target.textContent){
         case 'User':
             
-            Controller.users();
+            Controller.users(Model.userUrl);
             break;
         
         case 'Album':
-            Controller.albums();
+            Controller.albums(Model.albumUrl);
             break;
 
         case 'Photos':
-            Controller.photos();
+            Controller.photos(Model.photoUrl);
             break;
 
         case 'Todos':
-            Controller.todos();
+            Controller.todos(Model.todoUrl);
             break;        
 
         case 'Post':
-            Controller.posts();
+            Controller.posts(Model.postUrl);
             break;
         case 'Comments':
-            Controller.comments();
+            Controller.comments(Model.commentUrl);
             break;
         default: console.log('clicked', e.target.textContent);
 
@@ -86,8 +86,8 @@ let View = {
 
 let Controller = {
 
-    users(){
-        fetch(Model.userUrl).then(e => e.json())
+    users(url){
+        this.getData(url)
     .then((allUsers)=>{
         let userlist = allUsers.map(value=>`<div class="users-list" id="${value.id + ''}">
         <p>${value.name}</p>
@@ -99,9 +99,9 @@ let Controller = {
     },
 
     
-    albums(){
+    albums(url){
 
-        this.getData(Model.albumUrl).then(allAlbums => {
+        this.getData(url).then(allAlbums => {
             console.log(allAlbums);
         let albumList =  allAlbums.map(album =>  `<div class=" list album-list"><h3>${album.title}</h3><p>Album by user with Id: 
         ${album.userId}
@@ -113,16 +113,16 @@ let Controller = {
         
 
     },
-    photos(){
-        this.getData(Model.photoUrl).then(allPhoto => {
+    photos(url){
+        this.getData(url).then(allPhoto => {
             console.log(allPhoto);
         let photoList =  allPhoto.map(photo =>  `<div class="photo-list list"><h3>${photo.title}</h3><div><img src="${photo.thumbnailUrl}" alt="Pics not foung">
         </div></div>`).join('');
         displayDiv.innerHTML = '<div><h2>All Photo</h2></div>'+photoList;
         });
     },
-    posts(){
-        this.getData(Model.postUrl).then(allPost => {
+    posts(url){
+        this.getData(url).then(allPost => {
             console.log(allPost);
         let postList =  allPost.map(post =>  `<div class="list post-list"><h3>${post.title}</h3><p>Post by user with Id: 
         ${post.userId}
@@ -131,13 +131,13 @@ let Controller = {
         });
         
     },
-    comments(){
-        this.getData(Model.commentUrl).then(comment => {
+    comments(url){
+        this.getData(url).then(comment => {
             displayDiv.innerHTML = '<div><h2>All Comments</h2></div>'+ comment.map(comt =>  `<div class="list comments-list"><h3>${comt.name}</h3><div><span>${[comt.email,comt.postId].join('</span><span>From post with Id: ')}</span></div></div>`).join('');
         }).catch(error => console.log(error));
     },
-    todos(){
-        this.getData(Model.todoUrl).then(allTodo => {
+    todos(url){
+        this.getData(url).then(allTodo => {
             console.log(allTodo);
         let todoList =  allTodo.map(todo =>  `<div class="todo-list list"><h3>${todo.title}</h3><span class="${todo.completed?'completed':'uncompleted'}">${todo.completed?'&check;':'&times;'}</span><p>Todos by user with Id: 
         ${todo.userId}
