@@ -17,7 +17,26 @@
         <span id="comments" class="nav">Comments</span>
     </div>
     <aside>
+        <div id="filter-div">
+            <form action="" id="filterForm">
+                <select name="user" id="userDropDown" aria-placeholder="Filter by User" >
+                    <option value="select">Select user</option>
+                </select>
 
+                <select name="idNum" id="idDropDown" placeholder="Filter by Id" >
+                    <option value="select">Select Id</option>
+                </select>
+
+                <select name="album" id="albumDropDown" placeholder="Filter by Album" >
+                    <option value="select">Select Album</option>
+                </select>
+
+                <select name="post" id="postDropDown" placeholder="Filter by Post" >
+                    <option value="select">Select Post</option>
+                </select>
+                <input type="submit" value="Submit" id="formSubmit">
+            </form>
+        </div>
     </aside>
     <div id="main-display">
         <div id="general-display">

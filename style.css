@@ -26,6 +26,30 @@ aside{
     left: 0px;
 }
 
+
+/* styling for filtering form */
+#filterForm{
+    background: linear-gradient(38deg, rgba(196, 160, 160, 0.8), rgba(81, 112, 117, 0.4));
+    height: 60vh;
+    width: 20vw;
+    padding: 10px;
+    margin-top: 10vh;
+    margin-left: 2vw;
+}
+#filterForm > select{
+    display: block;
+    height: 12%;
+    width: 95%;
+    margin: 10px 10px;
+    padding: 4px;
+
+}
+#formSubmit{
+    margin-left: 26%;
+    height: 24px;
+    width: 80px;
+}
+
 #main-display{
     position: absolute;
     width: 70vw;
