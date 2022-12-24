@@ -124,7 +124,7 @@ let Controller = {
     posts(){
         this.getData(Model.postUrl).then(allPost => {
             console.log(allPost);
-        let postList =  allPost.map(post =>  `<div class="list"><h3>${post.title}</h3><p>Album by user with Id: 
+        let postList =  allPost.map(post =>  `<div class="list post-list"><h3>${post.title}</h3><p>Post by user with Id: 
         ${post.userId}
         </p></div>`).join('');
         displayDiv.innerHTML = '<div><h2>All Post</h2></div>'+postList;
@@ -133,7 +133,7 @@ let Controller = {
     },
     comments(){
         this.getData(Model.commentUrl).then(comment => {
-            displayDiv.innerHTML = '<div><h2>All Comments</h2></div>'+ comment.map(comt =>  `<div class="list"><h3>${comt.name}</h3><div><span>${[comt.email,comt.postId].join('</span><span>From post with Id: ')}</span></div></div>`).join('');
+            displayDiv.innerHTML = '<div><h2>All Comments</h2></div>'+ comment.map(comt =>  `<div class="list comments-list"><h3>${comt.name}</h3><div><span>${[comt.email,comt.postId].join('</span><span>From post with Id: ')}</span></div></div>`).join('');
         }).catch(error => console.log(error));
     },
     todos(){

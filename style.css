@@ -71,6 +71,9 @@ aside{
 .list > div {
     display: flex;
     justify-content: space-between;
+    align-items: flex-end;
+    padding: 4px;
+    margin: 4px;
 }
 
 .users-list{
@@ -149,5 +152,25 @@ aside{
 
 
 .todo-list > p{
+    text-align: right;
+}
+
+
+/* styling for all comments */
+
+.comments-list{
+    background-color: rgb(104, 51, 14);
+    border: 1px solid rgb(138, 123, 123);
+    box-shadow: 2px 2px 8px 3px rgb(138, 123, 123);
+    color: rgb(206, 192, 192);
+    height: 60px;
+}
+
+/* styling for all Post tab */
+.post-list {
+    background-color: rgb(47, 90, 107);    
+    color: rgb(240, 231, 221);   
+}
+.post-list > p{
     text-align: right;
 }
