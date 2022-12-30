@@ -1,7 +1,11 @@
-let displayDiv = document.getElementById('general-display');
-let navLinks = document.getElementById('nav-container');
-let filterForm = document.forms[0];
-let idList = filterForm.idDropDown;
+const displayDiv = document.getElementById('general-display');
+const navLinks = document.getElementById('nav-container');
+const userDropDown = document.getElementById('userDropDown');
+const idDropDown = document.getElementById('idDropDown');
+const albumDropDown = document.getElementById('albumDropDown');
+const postDropDown = document.getElementById('postDropDown');
+const filterForm = document.forms[0];
+const idList = filterForm.idDropDown;
 let activeTab = '';
 console.log(navLinks.children);
 console.log(filterForm);
@@ -11,8 +15,45 @@ filterForm['formSubmit'].addEventListener('click', e => {
     case 'User':
         if(idList.value !== 'Select'){
             Model.userUrlFil = Model.userUrl + `/${idList.value}`;
-            Controller.users(Model.userUrlFil, true);
+            Controller.users(Model.userUrlFil);
         }
+        break;
+    
+    case 'Album':
+        if(idList.value !== 'Select'){
+            Model.albumUrlFil = Model.albumUrl + `/${idList.value}`;
+            Controller.albums(Model.albumUrlFil);
+        }
+        break;
+    
+
+    case 'Photos':
+        if(idList.value !== 'Select'){
+            Model.photoUrlFil = Model.photoUrl + `/${idList.value}`;
+            Controller.photos(Model.photoUrlFil);
+        }
+        break;
+    
+    case 'Todos':
+        if(idList.value !== 'Select'){
+            Model.todoUrlFil = Model.todoUrl + `/${idList.value}`;
+            Controller.todos(Model.todoUrlFil);
+        }
+        break;
+
+    case 'Post':
+        if(idList.value !== 'Select'){
+            Model.postUrlFil = Model.postUrl + `/${idList.value}`;
+            Controller.posts(Model.postUrlFil);
+        }
+        break;
+    case 'Comments':
+        if(idList.value !== 'Select'){
+            Model.commentUrlFil = Model.commentUrl + `/${idList.value}`;
+            Controller.comments(Model.commentUrlFil);
+        }
+        break;
+    default: console.log('Kindly select an active Tab.');
    }
 });
 
@@ -28,25 +69,41 @@ navLinks.addEventListener('click',(e)=>{
     switch (e.target.textContent){
         case 'User':
             Controller.filterReset();
+            View.hide([userDropDown, albumDropDown, postDropDown]);
             Controller.users(Model.userUrl);
             break;
         
         case 'Album':
+            Controller.filterReset();
+            View.hide([albumDropDown, postDropDown]);
+            View.show([userDropDown]);
             Controller.albums(Model.albumUrl);
             break;
 
         case 'Photos':
+            Controller.filterReset();
+            View.hide([postDropDown, userDropDown]);
+            View.show([albumDropDown]);
             Controller.photos(Model.photoUrl);
             break;
 
         case 'Todos':
+            Controller.filterReset();
+            View.hide([albumDropDown, postDropDown]);
+            View.show([userDropDown]);
             Controller.todos(Model.todoUrl);
             break;        
 
         case 'Post':
+            Controller.filterReset();
+            View.hide([albumDropDown, postDropDown]);
+            View.show([userDropDown]);
             Controller.posts(Model.postUrl);
             break;
         case 'Comments':
+            Controller.filterReset();
+            View.hide([albumDropDown, userDropDown]);
+            View.show([postDropDown]);
             Controller.comments(Model.commentUrl);
             break;
         default: console.log('clicked', e.target.textContent);
@@ -74,11 +131,19 @@ let Model = {
 
 
 let View = {
-    hide(element){
-        element.style.display = 'none';        
+    hide(elements){
+        if (typeof(elements)==='object'){
+            elements.forEach(element => {
+                element.style.display = 'none';
+            });
+        }else {elements.style.display = 'none';}        
     },
-    show(element){
-        element.style.display = 'block';
+    show(elements){
+        if (typeof(elements)==='object'){
+            elements.forEach(element => {
+                element.style.display = 'block';
+            });
+        }else {elements.style.display = 'block';} 
     }, 
     render(element, content, attributes={}){
         let attrkeys = Object.keys(attributes);
@@ -105,41 +170,55 @@ let View = {
 
 let Controller = {
 
-    users(url, filt=false){
-       if (!filt){
+    users(url){
+       
         this.getData(url)
     .then((allUsers)=>{
-        let userlist = allUsers.map(value=>`<div class="users-list" id="${value.id + ''}">
+        if(this.isArray(allUsers)){
+            let userlist = allUsers.map(value=>`<div class="users-list" id="${value.id + ''}">
         <p>${value.name}</p>
         <div><span>${[value.email,value.phone,value.website].join('</span><span>')}</span></div>
         </div>`).join('');
         displayDiv.innerHTML = '<div><h2>All Users</h2></div>'+userlist;
-    })
-       } else{
-        this.getData(url)
-    .then((value)=>{
-        let userlist = `<div class="users-list" id="${value.id + ''}">
-        <p>${value.name}</p>
-        <div><span>${[value.email,value.phone,value.website].join('</span><span>')}</span></div>
+        }else{
+            let userlist = `<div class="users-list" id="${allUsers.id + ''}">
+        <p>${allUsers.name}</p>
+        <div><span>${[allUsers.email,allUsers.phone,allUsers.website].join('</span><span>')}</span></div>
         </div>`;
         displayDiv.innerHTML = '<div><h2>All Users</h2></div>'+userlist;
+        }
+        
     })
-       }
+       
         
                        
     },
 
     
     albums(url){
-        this.filterReset();
+        
         this.getData(url).then(allAlbums => {
-            console.log(allAlbums);
+            if(this.isArray(allAlbums)){
+                console.log(allAlbums);
         let albumList =  allAlbums.map(album =>  `<div class=" list album-list"><h3>${album.title}</h3><p>Album by user with Id: 
         ${album.userId}
         </p></div>`).join('');
         // displayDiv.innerHTML = albumList;
         View.render(displayDiv,'<div><h2>All Allbums</h2></div>'+albumList);
+            }else{
+                let albumList =  `<div class=" list album-list"><h3>${allAlbums.title}</h3><p id="user${allAlbums.userId}">Album by user with Id: 
+        ${this.getData(Model.userUrl + `/${allAlbums.userId}`).then(user => {
+            document.querySelector(`.album-list > #user${allAlbums.userId}`).textContent = 'Album by: ' + user.name;
+        }) }
+        </p></div>`;
+        // displayDiv.innerHTML = albumList;
+        View.render(displayDiv,'<div><h2>All Allbums</h2></div>'+albumList);
+            }
+            
         });
+        
+        
+        
         
         
 
@@ -147,43 +226,74 @@ let Controller = {
     photos(url){
         this.filterReset();
         this.getData(url).then(allPhoto => {
-            console.log(allPhoto);
+            if (this.isArray(allPhoto)){
+                console.log(allPhoto);
         let photoList =  allPhoto.map(photo =>  `<div class="photo-list list"><h3>${photo.title}</h3><div><img src="${photo.thumbnailUrl}" alt="Pics not foung">
         </div></div>`).join('');
         displayDiv.innerHTML = '<div><h2>All Photo</h2></div>'+photoList;
+            }else{
+                let photoList =  `<div class="photo-list list"><h3>${allPhoto.title}</h3><div><img src="${allPhoto.thumbnailUrl}" alt="Pics not found">
+        </div></div>`;
+        displayDiv.innerHTML = '<div><h2>All Photo</h2></div>'+photoList;
+            }
+            
         });
     },
     posts(url){
         this.filterReset();
         this.getData(url).then(allPost => {
-            console.log(allPost);
+            if(this.isArray(allPost)){
+                console.log(allPost);
         let postList =  allPost.map(post =>  `<div class="list post-list"><h3>${post.title}</h3><p>Post by user with Id: 
         ${post.userId}
         </p></div>`).join('');
         displayDiv.innerHTML = '<div><h2>All Post</h2></div>'+postList;
+            }else{
+                let postList =  `<div class="list post-list"><h3>${allPost.title}</h3><p>Post by user with Id: 
+        ${allPost.userId}
+        </p></div>`;
+        displayDiv.innerHTML = '<div><h2>All Post</h2></div>'+postList;
+            }
+            
         });
         
     },
     comments(url){
-        this.filterReset();
         this.getData(url).then(comment => {
-            displayDiv.innerHTML = '<div><h2>All Comments</h2></div>'+ comment.map(comt =>  `<div class="list comments-list"><h3>${comt.name}</h3><div><span>${[comt.email,comt.postId].join('</span><span>From post with Id: ')}</span></div></div>`).join('');
+            if(this.isArray(comment)){
+                displayDiv.innerHTML = '<div><h2>All Comments</h2></div>'+ comment.map(comt =>  `<div class="list comments-list"><h3>${comt.name}</h3><div><span>${[comt.email,comt.postId].join('</span><span>From post with Id: ')}</span></div></div>`).join('');
+            }else{
+                displayDiv.innerHTML = '<div><h2>All Comments</h2></div>'+  `<div class="list comments-list"><h3>${comment.name}</h3><div><span>${[comment.email,comment.postId].join('</span><span>From post with Id: ')}</span></div></div>`;
+            }
+            
         }).catch(error => console.log(error));
     },
     todos(url){
-        this.filterReset();
         this.getData(url).then(allTodo => {
-            console.log(allTodo);
-        let todoList =  allTodo.map(todo =>  `<div class="todo-list list"><h3>${todo.title}</h3><span class="${todo.completed?'completed':'uncompleted'}">${todo.completed?'&check;':'&times;'}</span><p>Todos by user with Id: 
+            if (this.isArray(allTodo)){
+                let todoList =  allTodo.map(todo =>  `<div class="todo-list list"><h3>${todo.title}</h3><span class="${todo.completed?'completed':'uncompleted'}">${todo.completed?'&check;':'&times;'}</span><p>Todos by user with Id: 
         ${todo.userId}
         </p></div>`).join('');
-        displayDiv.innerHTML = '<div><h2>All Todos</h2></div>'+todoList;             
+        displayDiv.innerHTML = '<div><h2>All Todos</h2></div>'+todoList;  
+            }else{
+                let todoList =  `<div class="todo-list list"><h3>${allTodo.title}</h3><span class="${allTodo.completed?'completed':'uncompleted'}">${allTodo.completed?'&check;':'&times;'}</span><p>Todos by user with Id: 
+        ${allTodo.userId}
+        </p></div>`
+        displayDiv.innerHTML = '<div><h2>All Todos</h2></div>'+todoList; 
+            }
+                   
         });
                
     },
     filterReset(){
         filterForm.reset();
     },
+
+    isArray(res) {
+        return Object.prototype.toString.call(res) === '[object Array]';
+    },
+    
+    
     async getData(url){
         
       let response = await fetch(url).then(e => e.json());
