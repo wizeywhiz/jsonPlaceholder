@@ -1,5 +1,6 @@
 const displayDiv = document.getElementById('general-display');
 const navLinks = document.getElementById('nav-container');
+const userNavLink = document.querySelector('#nav-container > #user');
 const userDropDown = document.getElementById('userDropDown');
 const idDropDown = document.getElementById('idDropDown');
 const albumDropDown = document.getElementById('albumDropDown');
@@ -7,8 +8,7 @@ const postDropDown = document.getElementById('postDropDown');
 const filterForm = document.forms[0];
 const idList = filterForm.idDropDown;
 let activeTab = '';
-console.log(navLinks.children);
-console.log(filterForm);
+
 filterForm['formSubmit'].addEventListener('click', e => {
     e.preventDefault();
    switch(activeTab){
@@ -292,6 +292,15 @@ let Controller = {
     isArray(res) {
         return Object.prototype.toString.call(res) === '[object Array]';
     },
+
+    initialPageSetup(){
+        userNavLink.classList.add('active-nav');
+        activeTab = 'User';
+        View.hide([userDropDown, albumDropDown, postDropDown]);
+        this.users(Model.userUrl);
+
+
+    },
     
     
     async getData(url){
@@ -303,6 +312,8 @@ let Controller = {
     }
 
 }
+
+Controller.initialPageSetup();
 
 
 
