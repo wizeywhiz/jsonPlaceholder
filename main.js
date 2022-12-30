@@ -185,7 +185,7 @@ let Controller = {
         <p>${allUsers.name}</p>
         <div><span>${[allUsers.email,allUsers.phone,allUsers.website].join('</span><span>')}</span></div>
         </div>`;
-        displayDiv.innerHTML = '<div><h2>All Users</h2></div>'+userlist;
+        displayDiv.innerHTML = '<div><h2>Filtered Users</h2></div>'+userlist;
         }
         
     })
@@ -212,7 +212,7 @@ let Controller = {
         }) }
         </p></div>`;
         // displayDiv.innerHTML = albumList;
-        View.render(displayDiv,'<div><h2>All Allbums</h2></div>'+albumList);
+        View.render(displayDiv,'<div><h2>Filtered Allbums</h2></div>'+albumList);
             }
             
         });
@@ -234,7 +234,7 @@ let Controller = {
             }else{
                 let photoList =  `<div class="photo-list list"><h3>${allPhoto.title}</h3><div><img src="${allPhoto.thumbnailUrl}" alt="Pics not found">
         </div></div>`;
-        displayDiv.innerHTML = '<div><h2>All Photo</h2></div>'+photoList;
+        displayDiv.innerHTML = '<div><h2>Filtered Photo</h2></div>'+photoList;
             }
             
         });
@@ -252,7 +252,7 @@ let Controller = {
                 let postList =  `<div class="list post-list"><h3>${allPost.title}</h3><p>Post by user with Id: 
         ${allPost.userId}
         </p></div>`;
-        displayDiv.innerHTML = '<div><h2>All Post</h2></div>'+postList;
+        displayDiv.innerHTML = '<div><h2>Filtered Post</h2></div>'+postList;
             }
             
         });
@@ -263,7 +263,7 @@ let Controller = {
             if(this.isArray(comment)){
                 displayDiv.innerHTML = '<div><h2>All Comments</h2></div>'+ comment.map(comt =>  `<div class="list comments-list"><h3>${comt.name}</h3><div><span>${[comt.email,comt.postId].join('</span><span>From post with Id: ')}</span></div></div>`).join('');
             }else{
-                displayDiv.innerHTML = '<div><h2>All Comments</h2></div>'+  `<div class="list comments-list"><h3>${comment.name}</h3><div><span>${[comment.email,comment.postId].join('</span><span>From post with Id: ')}</span></div></div>`;
+                displayDiv.innerHTML = '<div><h2>Filtered Comment</h2></div>'+  `<div class="list comments-list"><h3>${comment.name}</h3><div><span>${[comment.email,comment.postId].join('</span><span>From post with Id: ')}</span></div></div>`;
             }
             
         }).catch(error => console.log(error));
@@ -279,7 +279,7 @@ let Controller = {
                 let todoList =  `<div class="todo-list list"><h3>${allTodo.title}</h3><span class="${allTodo.completed?'completed':'uncompleted'}">${allTodo.completed?'&check;':'&times;'}</span><p>Todos by user with Id: 
         ${allTodo.userId}
         </p></div>`
-        displayDiv.innerHTML = '<div><h2>All Todos</h2></div>'+todoList; 
+        displayDiv.innerHTML = '<div><h2>Filtered Todos</h2></div>'+todoList; 
             }
                    
         });
