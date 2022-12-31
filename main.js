@@ -175,13 +175,14 @@ let Controller = {
         this.getData(url)
     .then((allUsers)=>{
         if(this.isArray(allUsers)){
-            let userlist = allUsers.map(value=>`<div class="users-list" id="${value.id + ''}">
+            let userlist = allUsers.map(value=>`<div class="list users-list" id="${value.id + ''}">
         <p>${value.name}</p>
         <div><span>${[value.email,value.phone,value.website].join('</span><span>')}</span></div>
         </div>`).join('');
+        idDropDown.innerHTML += allUsers.map(user => `<option value="${user.id}">${user.id}</option>`).join('');
         displayDiv.innerHTML = '<div><h2>All Users</h2></div>'+userlist;
         }else{
-            let userlist = `<div class="users-list" id="${allUsers.id + ''}">
+            let userlist = `<div class="list users-list" id="${allUsers.id + ''}">
         <p>${allUsers.name}</p>
         <div><span>${[allUsers.email,allUsers.phone,allUsers.website].join('</span><span>')}</span></div>
         </div>`;
@@ -204,6 +205,9 @@ let Controller = {
         ${album.userId}
         </p></div>`).join('');
         // displayDiv.innerHTML = albumList;
+        console.log(idList.firstChild);
+        idList.innerHTML = `<option value="select">Select Id</option>`
+        idDropDown.innerHTML += allAlbums.map(album => `<option value="${album.id}">${album.id}</option>`).join('');
         View.render(displayDiv,'<div><h2>All Allbums</h2></div>'+albumList);
             }else{
                 let albumList =  `<div class=" list album-list"><h3>${allAlbums.title}</h3><p id="user${allAlbums.userId}">Album by user with Id: 

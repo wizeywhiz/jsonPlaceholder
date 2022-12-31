@@ -87,11 +87,18 @@ aside{
 
 .list {    
     border-radius: 10px;
-    cursor: pointer;
     padding: 5px;
-    margin: 2px 5px;
-    height: 50px;
+    margin: 4px 5px;
+    min-height: 50px;
 }
+
+.list:hover {
+    cursor: pointer;
+    padding-bottom: 10px;
+    margin: 6px 8px;
+    transform: scale(0.98);
+}
+
 .list > div {
     display: flex;
     justify-content: space-between;
@@ -109,13 +116,7 @@ aside{
 
 }
 
-.users-list > div{
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    padding: 4px;
-    margin: 4px;
-}
+
 
 /* all Album tab list styling */
 .album-list {
