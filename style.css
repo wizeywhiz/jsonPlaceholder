@@ -62,6 +62,39 @@ aside{
     border: 1px solid rgb(202, 196, 196);
     box-shadow: 3px 3px 30px 5px rgb(202, 196, 196);
 }
+.active-display{
+    background-color: rgb(224, 179, 179);
+    position: absolute;
+    width: 70vw;
+    height: 86vh;
+    left: 0;
+    top: 0;
+    border: 1px solid rgb(202, 196, 196);
+    box-shadow: 3px 3px 30px 5px rgb(202, 196, 196);
+    /* z-index: 200; */
+
+}
+
+.detailDisp{
+    width: 95%;
+    height: 95%;
+    background: rgb(138, 123, 123);
+    padding: 10px;
+    border: 2px solid rgb(138, 123, 123);
+    box-shadow: 2px 2px 3px 3px rgb(175, 128, 128);
+    margin: 2.5% 2.5%;
+    overflow: auto;
+}
+
+.detailDisp div{
+    padding: 20px;    
+    border-bottom: 1px solid grey;
+    margin: 20px;
+}
+
+.detailDisp div:nth-child(n + 2){
+    background: rgb(209, 199, 199);
+}
 
 #nav-container{
     color: whitesmoke;

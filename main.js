@@ -1,4 +1,5 @@
 const displayDiv = document.getElementById('general-display');
+const detailDisp = document.getElementById('detail-display');
 const navLinks = document.getElementById('nav-container');
 const userNavLink = document.querySelector('#nav-container > #user');
 const userDropDown = document.getElementById('userDropDown');
@@ -188,9 +189,44 @@ let Controller = {
         </div>`;
         displayDiv.innerHTML = '<div><h2>Filtered Users</h2></div>'+userlist;
         }
-        
-    })
-       
+
+        ulist = document.getElementsByClassName('users-list');
+    console.log(ulist);
+    for(user of ulist){
+        user.addEventListener('click',function(e){
+            console.log(user.id);
+            detailDisp.classList.add('active-display');
+            Controller.getData(Model.userUrl +'/' + user.id).then(userDetails => {
+                detailDisp.textContent = JSON.stringify(userDetails);
+                let detailDiv = document.createElement('div');
+                let details = `<div class="detailDisp">
+                <div><h3>${userDetails.name}</h3>
+                <h6>${userDetails.username}</h6>
+                <div style="display: flex; justify-content: space-between;"><span>Email: ${userDetails.email}</span> <span>Phone: ${userDetails.phone}</span></div></div>
+
+                <div><h5>Address</h5>
+                <p>${userDetails.address.suite + ", " + userDetails.address.street + ", " + userDetails.address.city }</p>
+                <p>Zipcode: ${userDetails.address.zipcode}</p>
+                <div id="mapDiv"></div>
+                </div>
+
+                <div><h5>Company</h5>
+                <h4>${userDetails.company.name}</h4>
+                <p>${userDetails.company.catchPhrase}</p>
+                
+                </div>
+
+                </div>`
+                detailDiv.innerHTML = details;
+                detailDisp.innerHTML = details;
+
+
+            })
+        })
+    }
+    
+    });
+
         
                        
     },
