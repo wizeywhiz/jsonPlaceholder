@@ -231,8 +231,10 @@ let Controller = {
                 detailDisp.innerHTML += details + userLinks;
                 View.show([detailDisp]);
                 document.querySelector('#detail-display > #closebtn').addEventListener('click', ()=>{
-                    // detailDisp.innerHTML = detailDisp.firstElementChild;
                     console.log(detailDisp.firstElementChild);
+                    let initialDisp = detailDisp.firstElementChild;
+                    detailDisp.innerHTML = '';
+                    detailDisp.append(initialDisp);
                     View.hide([detailDisp]);
                     View.show([displayDiv]);
                 })
