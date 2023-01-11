@@ -64,11 +64,6 @@ aside{
 }
 .active-display{
     background-color: rgb(224, 179, 179);
-    position: absolute;
-    width: 70vw;
-    height: 86vh;
-    left: 0;
-    top: 0;
     border: 1px solid rgb(202, 196, 196);
     box-shadow: 3px 3px 30px 5px rgb(202, 196, 196);
     /* z-index: 200; */
@@ -76,14 +71,29 @@ aside{
 }
 
 .detailDisp{
-    width: 95%;
-    height: 95%;
+    width: 100%;
+    height: 100%;
     background: rgb(138, 123, 123);
     padding: 10px;
     border: 2px solid rgb(138, 123, 123);
     box-shadow: 2px 2px 3px 3px rgb(175, 128, 128);
-    margin: 2.5% 2.5%;
     overflow: auto;
+}
+
+#detail-display > #closebtn{
+    margin-left: 95%;
+    color: rgb(173, 67, 67);
+    border: 1px solid rgb(173, 67, 67);
+    font-size: 1.3rem;
+    width: fit-content;
+    padding: 0px 0.5rem;
+    transition: .5s all;
+}
+#detail-display > #closebtn:hover{
+    transform: scale(1.2);
+    color: red;
+    border: 1px solid red;
+    cursor: pointer;
 }
 
 .detailDisp div{

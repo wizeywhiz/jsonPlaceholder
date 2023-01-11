@@ -70,40 +70,41 @@ navLinks.addEventListener('click',(e)=>{
     switch (e.target.textContent){
         case 'User':
             Controller.filterReset();
-            View.hide([userDropDown, albumDropDown, postDropDown]);
+            View.hide([userDropDown, albumDropDown, postDropDown, detailDisp]);
             Controller.users(Model.userUrl);
+            Controller.userDetails();
             break;
         
         case 'Album':
             Controller.filterReset();
-            View.hide([albumDropDown, postDropDown]);
+            View.hide([albumDropDown, postDropDown, detailDisp]);
             View.show([userDropDown]);
             Controller.albums(Model.albumUrl);
             break;
 
         case 'Photos':
             Controller.filterReset();
-            View.hide([postDropDown, userDropDown]);
+            View.hide([postDropDown, userDropDown, detailDisp]);
             View.show([albumDropDown]);
             Controller.photos(Model.photoUrl);
             break;
 
         case 'Todos':
             Controller.filterReset();
-            View.hide([albumDropDown, postDropDown]);
+            View.hide([albumDropDown, postDropDown, detailDisp]);
             View.show([userDropDown]);
             Controller.todos(Model.todoUrl);
             break;        
 
         case 'Post':
             Controller.filterReset();
-            View.hide([albumDropDown, postDropDown]);
+            View.hide([albumDropDown, postDropDown, detailDisp]);
             View.show([userDropDown]);
             Controller.posts(Model.postUrl);
             break;
         case 'Comments':
             Controller.filterReset();
-            View.hide([albumDropDown, userDropDown]);
+            View.hide([albumDropDown, userDropDown, detailDisp]);
             View.show([postDropDown]);
             Controller.comments(Model.commentUrl);
             break;
@@ -171,9 +172,9 @@ let View = {
 
 let Controller = {
 
-    users(url){
+    async users(url){
        
-        this.getData(url)
+        await this.getData(url)
     .then((allUsers)=>{
         if(this.isArray(allUsers)){
             let userlist = allUsers.map(value=>`<div class="list users-list" id="${value.id + ''}">
@@ -190,45 +191,79 @@ let Controller = {
         displayDiv.innerHTML = '<div><h2>Filtered Users</h2></div>'+userlist;
         }
 
-        ulist = document.getElementsByClassName('users-list');
-    console.log(ulist);
-    for(user of ulist){
-        user.addEventListener('click',function(e){
-            console.log(user.id);
-            detailDisp.classList.add('active-display');
+    //     ulist = document.getElementsByClassName('users-list');
+    // console.log(ulist);
+    
+    
+    });
+
+     this.userDetails();   
+                       
+    },
+
+    userDetails(){
+        let userList = document.querySelectorAll('#general-display > div');
+        console.log(userList);
+        userList.forEach(user =>{
+            user.addEventListener('click',function(){
+                    console.log(user.id);
+                    detailDisp.classList.add('active-display');
             Controller.getData(Model.userUrl +'/' + user.id).then(userDetails => {
-                detailDisp.textContent = JSON.stringify(userDetails);
-                let detailDiv = document.createElement('div');
                 let details = `<div class="detailDisp">
                 <div><h3>${userDetails.name}</h3>
                 <h6>${userDetails.username}</h6>
                 <div style="display: flex; justify-content: space-between;"><span>Email: ${userDetails.email}</span> <span>Phone: ${userDetails.phone}</span></div></div>
-
+    
                 <div><h5>Address</h5>
                 <p>${userDetails.address.suite + ", " + userDetails.address.street + ", " + userDetails.address.city }</p>
                 <p>Zipcode: ${userDetails.address.zipcode}</p>
                 <div id="mapDiv"></div>
                 </div>
-
+    
                 <div><h5>Company</h5>
                 <h4>${userDetails.company.name}</h4>
                 <p>${userDetails.company.catchPhrase}</p>
                 
                 </div>
-
-                </div>`
-                detailDiv.innerHTML = details;
-                detailDisp.innerHTML = details;
-
-
-            })
-        })
-    }
     
-    });
+                </div>`
+                let userLinks = `<br><span>view albums...</span><span>view Posts</span><span>view Todos</span>`
+                detailDisp.innerHTML += details + userLinks;
+                View.show([detailDisp]);
+                document.querySelector('#detail-display > #closebtn').addEventListener('click', ()=>{
+                    // detailDisp.innerHTML = detailDisp.firstElementChild;
+                    console.log(detailDisp.firstElementChild);
+                    View.hide([detailDisp]);
+                    View.show([displayDiv]);
+                })
+                View.hide([displayDiv]);
+                
+    })})})
 
         
-                       
+          
+    
+        //     //     // adding maps to the details
+        //     //     // Initialize and add the map
+        //     // function initMap() {
+        //     //     const loc = userDetails.address.geo;
+        //     //     const map = new google.maps.Map(document.getElementById("mapDiv"), {
+        //     //     zoom: 4,
+        //     //     center: loc,
+        //     //     });
+                
+        //     //     const marker = new google.maps.Marker({
+        //     //     position: loc,
+        //     //     map: map,
+        //     //     });
+        //     // }
+            
+        //     // window.initMap = initMap();
+    
+    
+        //     // })
+        // })
+
     },
 
     
