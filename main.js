@@ -9,7 +9,6 @@ const postDropDown = document.getElementById('postDropDown');
 const filterForm = document.forms[0];
 const idList = filterForm.idDropDown;
 let activeTab = '';
-
 filterForm['formSubmit'].addEventListener('click', e => {
     e.preventDefault();
    switch(activeTab){
@@ -173,15 +172,15 @@ let View = {
 let Controller = {
 
     async users(url){
-       
+        View.show([displayDiv]);
         await this.getData(url)
     .then((allUsers)=>{
+        idDropDown.innerHTML += allUsers.map(user => `<option value="${user.id}">${user.id}</option>`).join('');
         if(this.isArray(allUsers)){
             let userlist = allUsers.map(value=>`<div class="list users-list" id="${value.id + ''}">
         <p>${value.name}</p>
         <div><span>${[value.email,value.phone,value.website].join('</span><span>')}</span></div>
         </div>`).join('');
-        idDropDown.innerHTML += allUsers.map(user => `<option value="${user.id}">${user.id}</option>`).join('');
         displayDiv.innerHTML = '<div><h2>All Users</h2></div>'+userlist;
         }else{
             let userlist = `<div class="list users-list" id="${allUsers.id + ''}">
@@ -227,9 +226,14 @@ let Controller = {
                 </div>
     
                 </div>`
-                let userLinks = `<br><span>view albums...</span><span>view Posts</span><span>view Todos</span>`
+                let userLinks = `<br><button onclick="Controller.albums('${Model.userUrl + '/' + userDetails.id + '/albums'}', '${userDetails.name.toString()}');">view albums >></button><button>view Posts >></button><button>view Todos >></button>`
                 detailDisp.innerHTML += details + userLinks;
                 View.show([detailDisp]);
+
+                // adding maps to the details
+                // Initialize and add the map
+            
+
                 document.querySelector('#detail-display > #closebtn').addEventListener('click', ()=>{
                     console.log(detailDisp.firstElementChild);
                     let initialDisp = detailDisp.firstElementChild;
@@ -239,57 +243,42 @@ let Controller = {
                     View.show([displayDiv]);
                 })
                 View.hide([displayDiv]);
+
+
                 
     })})})
 
-        
-          
-    
-        //     //     // adding maps to the details
-        //     //     // Initialize and add the map
-        //     // function initMap() {
-        //     //     const loc = userDetails.address.geo;
-        //     //     const map = new google.maps.Map(document.getElementById("mapDiv"), {
-        //     //     zoom: 4,
-        //     //     center: loc,
-        //     //     });
-                
-        //     //     const marker = new google.maps.Marker({
-        //     //     position: loc,
-        //     //     map: map,
-        //     //     });
-        //     // }
-            
-        //     // window.initMap = initMap();
-    
-    
-        //     // })
-        // })
+  
 
     },
 
     
-    albums(url){
+    albums(url, filtername=''){
+        detailDisp.classList.remove('active-display');
+        View.hide([detailDisp]);
         
         this.getData(url).then(allAlbums => {
             if(this.isArray(allAlbums)){
                 console.log(allAlbums);
-        let albumList =  allAlbums.map(album =>  `<div class=" list album-list"><h3>${album.title}</h3><p>Album by user with Id: 
+        let albumList =  allAlbums.map(album =>  `<div class="list album-list"><h3>${album.title}</h3><p>Album by user with Id: 
         ${album.userId}
         </p></div>`).join('');
         // displayDiv.innerHTML = albumList;
         console.log(idList.firstChild);
         idList.innerHTML = `<option value="select">Select Id</option>`
         idDropDown.innerHTML += allAlbums.map(album => `<option value="${album.id}">${album.id}</option>`).join('');
-        View.render(displayDiv,'<div><h2>All Allbums</h2></div>'+albumList);
+        View.show([displayDiv]);
+        View.render(displayDiv,`${filtername === ''? '<div><h2>All Allbums</h2></div>': '<div><h2>'+ filtername + ' Albums</h2></div>'}`+albumList);
             }else{
-                let albumList =  `<div class=" list album-list"><h3>${allAlbums.title}</h3><p id="user${allAlbums.userId}">Album by user with Id: 
+                let albumList =  `<div class="list album-list"><h3>${allAlbums.title}</h3><p id="user${allAlbums.userId}">Album by user with Id: 
         ${this.getData(Model.userUrl + `/${allAlbums.userId}`).then(user => {
             document.querySelector(`.album-list > #user${allAlbums.userId}`).textContent = 'Album by: ' + user.name;
         }) }
         </p></div>`;
-        // displayDiv.innerHTML = albumList;
-        View.render(displayDiv,'<div><h2>Filtered Allbums</h2></div>'+albumList);
+        // displayDiv.innerHTML = `${filtername === ''? '<h2>All Allbums</h2>': filtername}`+albumList;
+        View.show([displayDiv]);
+        View.render(displayDiv,`${filtername === ''? '<div><h2>Filtered Allbums</h2></div>': '<div><h2>'+ filtername + ' Albums</h2></div>'}`+albumList);
+        
             }
             
         });
@@ -300,8 +289,10 @@ let Controller = {
         
 
     },
+    
     photos(url){
         this.filterReset();
+        View.show([displayDiv]);
         this.getData(url).then(allPhoto => {
             if (this.isArray(allPhoto)){
                 console.log(allPhoto);
@@ -316,26 +307,88 @@ let Controller = {
             
         });
     },
+
     posts(url){
         this.filterReset();
+        View.show([displayDiv]);
         this.getData(url).then(allPost => {
             if(this.isArray(allPost)){
                 console.log(allPost);
-        let postList =  allPost.map(post =>  `<div class="list post-list"><h3>${post.title}</h3><p>Post by user with Id: 
+        let postList =  allPost.map(post =>  `<div class="list post-list" id="${post.id}"><h3>${post.title}</h3><p>Post by user with Id: 
         ${post.userId}
-        </p></div>`).join('');
+        </p>
+        <div class="postdetails ${post.id}"><h4>${post.body}</h4></div>
+        </div>`).join('');
         displayDiv.innerHTML = '<div><h2>All Post</h2></div>'+postList;
             }else{
-                let postList =  `<div class="list post-list"><h3>${allPost.title}</h3><p>Post by user with Id: 
+                let postList =  `<div class="list post-list" id="${allPost.id}"><h3>${allPost.title}</h3><p>Post by user with Id: 
         ${allPost.userId}
-        </p></div>`;
+        </p>
+        <div class="postdetails ${allPost.id}"><h4>${post.body}</h4></div>
+        </div>`;
         displayDiv.innerHTML = '<div><h2>Filtered Post</h2></div>'+postList;
             }
+
+            this.postDetails();
             
         });
         
+        
+    },
+
+    postDetails(){
+        let postList = document.querySelectorAll('#general-display > div');
+        console.log(postList);
+        postList.forEach(post =>{
+            post.addEventListener('click',function(clickedPost){
+                    console.log(post.id);
+            Controller.getData(Model.postUrl +'/' + post.id + '/comments').then(postComments => {
+                if(Controller.isArray(postComments)){
+                    console.log('we got an array');
+                   let comments = postComments.map(comment =>{
+                        `<div>
+                        <span>${comment.name}</span>
+                        <span>${comment.email}</span>
+                        <p>${comment.body}</p>
+                        </div>`
+                    }).join('');
+                    let dicv = document.querySelector(`.postdetails ${post.id.toString()}`);
+                    // dicv.append(comments);
+                    dicv.innerHTML += comments;
+                    dicv.classList.toggle('hidden');
+
+                }else{
+                    let comment =  `<div>
+                        <span>${comments.name}</span>
+                        <span>${commens.email}</span>
+                        <p>${comments.body}</p>
+                        </div>`;
+                        let dicv = document.querySelector(`.postdetails ${post.id.toString()}`);
+                        dicv.append(comment);
+                        dicv.classList.toggle('hidden');
+                }
+                
+
+                // adding maps to the details
+                // Initialize and add the map
+            
+
+                document.querySelector('#detail-display > #closebtn').addEventListener('click', ()=>{
+                    console.log(detailDisp.firstElementChild);
+                    let initialDisp = detailDisp.firstElementChild;
+                    detailDisp.innerHTML = '';
+                    detailDisp.append(initialDisp);
+                    View.hide([detailDisp]);
+                    View.show([displayDiv]);
+                })
+                View.hide([displayDiv]);
+
+
+                
+    })})})
     },
     comments(url){
+        View.show([displayDiv]);
         this.getData(url).then(comment => {
             if(this.isArray(comment)){
                 displayDiv.innerHTML = '<div><h2>All Comments</h2></div>'+ comment.map(comt =>  `<div class="list comments-list"><h3>${comt.name}</h3><div><span>${[comt.email,comt.postId].join('</span><span>From post with Id: ')}</span></div></div>`).join('');
@@ -346,6 +399,7 @@ let Controller = {
         }).catch(error => console.log(error));
     },
     todos(url){
+        View.show([displayDiv]);
         this.getData(url).then(allTodo => {
             if (this.isArray(allTodo)){
                 let todoList =  allTodo.map(todo =>  `<div class="todo-list list"><h3>${todo.title}</h3><span class="${todo.completed?'completed':'uncompleted'}">${todo.completed?'&check;':'&times;'}</span><p>Todos by user with Id: 
