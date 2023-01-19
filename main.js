@@ -299,6 +299,8 @@ let Controller = {
         this.filterReset();
         View.show([displayDiv]);
         this.getData(url).then(allPhoto => {
+            idList.innerHTML = `<option value="select">Select Id</option>`
+        idDropDown.innerHTML += allPhoto.map(photo => `<option value="${photo.id}">${photo.id}</option>`).join('');
             if (this.isArray(allPhoto)){
                 console.log(allPhoto);
         let photoList =  allPhoto.map(photo =>  `<div class="photo-list list"><h3>${photo.title}</h3><div><img src="${photo.thumbnailUrl}" alt="Pics not foung">
@@ -318,6 +320,8 @@ let Controller = {
         this.filterReset();
         View.show([displayDiv]);
         this.getData(url).then(allPost => {
+            idList.innerHTML = `<option value="select">Select Id</option>`
+        idDropDown.innerHTML += allPost.map(post => `<option value="${post.id}">${post.id}</option>`).join('');
             if(this.isArray(allPost)){
                 console.log(allPost);
         let postList =  allPost.map(post =>  `<div class="list post-list" id="${post.id}"><h3>${post.title}</h3><p>Post by user with Id: 
@@ -397,6 +401,8 @@ let Controller = {
         View.hide([detailDisp]);
         View.show([displayDiv]);
         this.getData(url).then(comment => {
+            idList.innerHTML = `<option value="select">Select Id</option>`
+        idDropDown.innerHTML += comment.map(commentt => `<option value="${commentt.id}">${commentt.id}</option>`).join('');
             if(this.isArray(comment)){
                 displayDiv.innerHTML = '<div><h2>All Comments</h2></div>'+ comment.map(comt =>  `<div class="list comments-list"><h3>${comt.name}</h3><div><span>${[comt.email,comt.postId].join('</span><span>From post with Id: ')}</span></div></div>`).join('');
             }else{
@@ -409,6 +415,8 @@ let Controller = {
         View.hide([detailDisp]);
         View.show([displayDiv]);
         this.getData(url).then(allTodo => {
+            idList.innerHTML = `<option value="select">Select Id</option>`
+        idDropDown.innerHTML += allTodo.map(todo => `<option value="${todo.id}">${todo.id}</option>`).join('');
             if (this.isArray(allTodo)){
                 let todoList =  allTodo.map(todo =>  `<div class="todo-list list"><h3>${todo.title}</h3><span class="${todo.completed?'completed':'uncompleted'}">${todo.completed?'&check;':'&times;'}</span><p>Todos by user with Id: 
         ${todo.userId}
