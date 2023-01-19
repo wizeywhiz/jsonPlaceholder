@@ -173,6 +173,7 @@ let Controller = {
 
     async users(url){
         View.show([displayDiv]);
+        View.hide([detailDisp]);
         await this.getData(url)
     .then((allUsers)=>{
         idDropDown.innerHTML += allUsers.map(user => `<option value="${user.id}">${user.id}</option>`).join('');
@@ -226,7 +227,9 @@ let Controller = {
                 </div>
     
                 </div>`
-                let userLinks = `<br><button onclick="Controller.albums('${Model.userUrl + '/' + userDetails.id + '/albums'}', '${userDetails.name.toString()}');">view albums >></button><button>view Posts >></button><button>view Todos >></button>`
+                let userLinks = `<br><button onclick="Controller.albums('${Model.userUrl + '/' + userDetails.id + '/albums'}', '${userDetails.name.toString()}');">view albums >></button>
+                <button onclick="Controller.posts('${Model.userUrl + '/' + userDetails.id + '/posts'}', '${userDetails.name.toString()}');">view Posts >></button>
+                <button onclick="Controller.todos('${Model.userUrl + '/' + userDetails.id + '/todos'}', '${userDetails.name.toString()}');">view Todos >></button>`
                 detailDisp.innerHTML += details + userLinks;
                 View.show([detailDisp]);
 
@@ -254,6 +257,7 @@ let Controller = {
 
     
     albums(url, filtername=''){
+        View.hide([detailDisp]);
         detailDisp.classList.remove('active-display');
         View.hide([detailDisp]);
         
@@ -291,6 +295,7 @@ let Controller = {
     },
     
     photos(url){
+        View.hide([detailDisp]);
         this.filterReset();
         View.show([displayDiv]);
         this.getData(url).then(allPhoto => {
@@ -308,7 +313,8 @@ let Controller = {
         });
     },
 
-    posts(url){
+    posts(url, filtername=''){
+        View.hide([detailDisp]);
         this.filterReset();
         View.show([displayDiv]);
         this.getData(url).then(allPost => {
@@ -319,14 +325,14 @@ let Controller = {
         </p>
         <div class="postdetails ${post.id}"><h4>${post.body}</h4></div>
         </div>`).join('');
-        displayDiv.innerHTML = '<div><h2>All Post</h2></div>'+postList;
+        displayDiv.innerHTML = `${filtername === ''? '<div><h2>All Posts</h2></div>': '<div><h2>'+ filtername + '\'s Post</h2></div>'}`+postList;
             }else{
                 let postList =  `<div class="list post-list" id="${allPost.id}"><h3>${allPost.title}</h3><p>Post by user with Id: 
         ${allPost.userId}
         </p>
         <div class="postdetails ${allPost.id}"><h4>${post.body}</h4></div>
         </div>`;
-        displayDiv.innerHTML = '<div><h2>Filtered Post</h2></div>'+postList;
+        displayDiv.innerHTML = `${filtername === ''? '<div><h2>Filtered Posts</h2></div>': '<div><h2>'+ filtername + '\'s Post</h2></div>'}`+postList;
             }
 
             this.postDetails();
@@ -359,9 +365,9 @@ let Controller = {
 
                 }else{
                     let comment =  `<div>
-                        <span>${comments.name}</span>
-                        <span>${commens.email}</span>
-                        <p>${comments.body}</p>
+                        <span>${postComments.name}</span>
+                        <span>${postComments.email}</span>
+                        <p>${postComments.body}</p>
                         </div>`;
                         let dicv = document.querySelector(`.postdetails ${post.id.toString()}`);
                         dicv.append(comment);
@@ -388,6 +394,7 @@ let Controller = {
     })})})
     },
     comments(url){
+        View.hide([detailDisp]);
         View.show([displayDiv]);
         this.getData(url).then(comment => {
             if(this.isArray(comment)){
@@ -398,19 +405,20 @@ let Controller = {
             
         }).catch(error => console.log(error));
     },
-    todos(url){
+    todos(url, filtername=''){
+        View.hide([detailDisp]);
         View.show([displayDiv]);
         this.getData(url).then(allTodo => {
             if (this.isArray(allTodo)){
                 let todoList =  allTodo.map(todo =>  `<div class="todo-list list"><h3>${todo.title}</h3><span class="${todo.completed?'completed':'uncompleted'}">${todo.completed?'&check;':'&times;'}</span><p>Todos by user with Id: 
         ${todo.userId}
         </p></div>`).join('');
-        displayDiv.innerHTML = '<div><h2>All Todos</h2></div>'+todoList;  
+        displayDiv.innerHTML = `${filtername === ''? '<div><h2>All Todos</h2></div>': '<div><h2>'+ filtername + '\'s Todos</h2></div>'}`+todoList;//'<div><h2>All Todos</h2></div>'+todoList;  
             }else{
                 let todoList =  `<div class="todo-list list"><h3>${allTodo.title}</h3><span class="${allTodo.completed?'completed':'uncompleted'}">${allTodo.completed?'&check;':'&times;'}</span><p>Todos by user with Id: 
         ${allTodo.userId}
         </p></div>`
-        displayDiv.innerHTML = '<div><h2>Filtered Todos</h2></div>'+todoList; 
+        displayDiv.innerHTML = `${filtername === ''? '<div><h2>Filtered Todos</h2></div>': '<div><h2>'+ filtername + '\'s Todos</h2></div>'}`+todoList; 
             }
                    
         });
