@@ -52,9 +52,9 @@ aside{
     margin-top: 10vh;
     margin-left: 2vw;
 }
-#filterForm > select{
+#filterForm  select{
     display: block;
-    height: 12%;
+    height: 3rem;
     width: 95%;
     margin: 10px 10px;
     padding: 4px;

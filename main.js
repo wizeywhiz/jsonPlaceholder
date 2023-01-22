@@ -20,9 +20,14 @@ filterForm['formSubmit'].addEventListener('click', e => {
         break;
     
     case 'Album':
-        if(idList.value !== 'Select'){
+        if(userDropDown.value !== 'Select'){
+            Model.albumUrlFil = Model.userUrl + `/${userDropDown.value}/albums`;
+            Controller.albums(Model.albumUrlFil);
+            console.log('album.notselect');
+        }else if(idList.value !== 'Select'){
             Model.albumUrlFil = Model.albumUrl + `/${idList.value}`;
             Controller.albums(Model.albumUrlFil);
+            console.log('album.notselect');
         }
         break;
     
@@ -35,14 +40,20 @@ filterForm['formSubmit'].addEventListener('click', e => {
         break;
     
     case 'Todos':
-        if(idList.value !== 'Select'){
+        if(userDropDown.value !== 'Select'){
+            Model.todoUrlFil = Model.userUrl + `/${userDropDown.value}/todos`;
+            Controller.todos(Model.todoUrlFil);
+        }else if(idList.value !== 'Select'){
             Model.todoUrlFil = Model.todoUrl + `/${idList.value}`;
             Controller.todos(Model.todoUrlFil);
         }
         break;
 
     case 'Post':
-        if(idList.value !== 'Select'){
+        if(userDropDown.value !== 'Select'){
+            Model.postUrlFil = Model.userUrl + `/${userDropDown.value}/posts`;
+            Controller.posts(Model.postUrlFil);
+        }else if(idList.value !== 'Select'){
             Model.postUrlFil = Model.postUrl + `/${idList.value}`;
             Controller.posts(Model.postUrlFil);
         }
@@ -69,42 +80,42 @@ navLinks.addEventListener('click',(e)=>{
     switch (e.target.textContent){
         case 'User':
             Controller.filterReset();
-            View.hide([userDropDown, albumDropDown, postDropDown, detailDisp]);
+            View.hide([userDropDown.parentElement, albumDropDown.parentElement, postDropDown.parentElement, detailDisp]);
             Controller.users(Model.userUrl);
             Controller.userDetails();
             break;
         
         case 'Album':
             Controller.filterReset();
-            View.hide([albumDropDown, postDropDown, detailDisp]);
-            View.show([userDropDown]);
+            View.hide([albumDropDown.parentElement, postDropDown.parentElement, detailDisp]);
+            View.show([userDropDown.parentElement]);
             Controller.albums(Model.albumUrl);
             break;
 
         case 'Photos':
             Controller.filterReset();
-            View.hide([postDropDown, userDropDown, detailDisp]);
-            View.show([albumDropDown]);
+            View.hide([postDropDown.parentElement, userDropDown.parentElement, detailDisp]);
+            View.show([albumDropDown.parentElement]);
             Controller.photos(Model.photoUrl);
             break;
 
         case 'Todos':
             Controller.filterReset();
-            View.hide([albumDropDown, postDropDown, detailDisp]);
-            View.show([userDropDown]);
+            View.hide([albumDropDown.parentElement, postDropDown.parentElement, detailDisp]);
+            View.show([userDropDown.parentElement]);
             Controller.todos(Model.todoUrl);
             break;        
 
         case 'Post':
             Controller.filterReset();
-            View.hide([albumDropDown, postDropDown, detailDisp]);
-            View.show([userDropDown]);
+            View.hide([albumDropDown.parentElement, postDropDown.parentElement, detailDisp]);
+            View.show([userDropDown.parentElement]);
             Controller.posts(Model.postUrl);
             break;
         case 'Comments':
             Controller.filterReset();
-            View.hide([albumDropDown, userDropDown, detailDisp]);
-            View.show([postDropDown]);
+            View.hide([albumDropDown.parentElement, userDropDown.parentElement, detailDisp]);
+            View.show([postDropDown.parentElement]);
             Controller.comments(Model.commentUrl);
             break;
         default: console.log('clicked', e.target.textContent);
@@ -176,8 +187,8 @@ let Controller = {
         View.hide([detailDisp]);
         await this.getData(url)
     .then((allUsers)=>{
-        idDropDown.innerHTML += allUsers.map(user => `<option value="${user.id}">${user.id}</option>`).join('');
         if(this.isArray(allUsers)){
+            idDropDown.innerHTML += allUsers.map(user => `<option value="${user.id}">${user.id}</option>`).join('');
             let userlist = allUsers.map(value=>`<div class="list users-list" id="${value.id + ''}">
         <p>${value.name}</p>
         <div><span>${[value.email,value.phone,value.website].join('</span><span>')}</span></div>
@@ -269,7 +280,7 @@ let Controller = {
         </p></div>`).join('');
         // displayDiv.innerHTML = albumList;
         console.log(idList.firstChild);
-        idList.innerHTML = `<option value="select">Select Id</option>`
+        idList.innerHTML = `<option value="Select">Select Id</option>`
         idDropDown.innerHTML += allAlbums.map(album => `<option value="${album.id}">${album.id}</option>`).join('');
         View.show([displayDiv]);
         View.render(displayDiv,`${filtername === ''? '<div><h2>All Allbums</h2></div>': '<div><h2>'+ filtername + ' Albums</h2></div>'}`+albumList);
@@ -299,9 +310,9 @@ let Controller = {
         this.filterReset();
         View.show([displayDiv]);
         this.getData(url).then(allPhoto => {
-            idList.innerHTML = `<option value="select">Select Id</option>`
-        idDropDown.innerHTML += allPhoto.map(photo => `<option value="${photo.id}">${photo.id}</option>`).join('');
+            idList.innerHTML = `<option value="Select">Select Id</option>`
             if (this.isArray(allPhoto)){
+                idDropDown.innerHTML += allPhoto.map(photo => `<option value="${photo.id}">${photo.id}</option>`).join('');
                 console.log(allPhoto);
         let photoList =  allPhoto.map(photo =>  `<div class="photo-list list"><h3>${photo.title}</h3><div><img src="${photo.thumbnailUrl}" alt="Pics not foung">
         </div></div>`).join('');
@@ -320,9 +331,9 @@ let Controller = {
         this.filterReset();
         View.show([displayDiv]);
         this.getData(url).then(allPost => {
-            idList.innerHTML = `<option value="select">Select Id</option>`
-        idDropDown.innerHTML += allPost.map(post => `<option value="${post.id}">${post.id}</option>`).join('');
+            idList.innerHTML = `<option value="Select">Select Id</option>`
             if(this.isArray(allPost)){
+                idDropDown.innerHTML += allPost.map(post => `<option value="${post.id}">${post.id}</option>`).join('');
                 console.log(allPost);
         let postList =  allPost.map(post =>  `<div class="list post-list" id="${post.id}"><h3>${post.title}</h3><p>Post by user with Id: 
         ${post.userId}
@@ -401,9 +412,9 @@ let Controller = {
         View.hide([detailDisp]);
         View.show([displayDiv]);
         this.getData(url).then(comment => {
-            idList.innerHTML = `<option value="select">Select Id</option>`
-        idDropDown.innerHTML += comment.map(commentt => `<option value="${commentt.id}">${commentt.id}</option>`).join('');
+            idList.innerHTML = `<option value="Select">Select Id</option>`
             if(this.isArray(comment)){
+                idDropDown.innerHTML += comment.map(commentt => `<option value="${commentt.id}">${commentt.id}</option>`).join('');
                 displayDiv.innerHTML = '<div><h2>All Comments</h2></div>'+ comment.map(comt =>  `<div class="list comments-list"><h3>${comt.name}</h3><div><span>${[comt.email,comt.postId].join('</span><span>From post with Id: ')}</span></div></div>`).join('');
             }else{
                 displayDiv.innerHTML = '<div><h2>Filtered Comment</h2></div>'+  `<div class="list comments-list"><h3>${comment.name}</h3><div><span>${[comment.email,comment.postId].join('</span><span>From post with Id: ')}</span></div></div>`;
@@ -415,9 +426,9 @@ let Controller = {
         View.hide([detailDisp]);
         View.show([displayDiv]);
         this.getData(url).then(allTodo => {
-            idList.innerHTML = `<option value="select">Select Id</option>`
-        idDropDown.innerHTML += allTodo.map(todo => `<option value="${todo.id}">${todo.id}</option>`).join('');
+            idList.innerHTML = `<option value="Select">Select Id</option>`
             if (this.isArray(allTodo)){
+                idDropDown.innerHTML += allTodo.map(todo => `<option value="${todo.id}">${todo.id}</option>`).join('');
                 let todoList =  allTodo.map(todo =>  `<div class="todo-list list"><h3>${todo.title}</h3><span class="${todo.completed?'completed':'uncompleted'}">${todo.completed?'&check;':'&times;'}</span><p>Todos by user with Id: 
         ${todo.userId}
         </p></div>`).join('');
@@ -443,7 +454,11 @@ let Controller = {
     initialPageSetup(){
         userNavLink.classList.add('active-nav');
         activeTab = 'User';
-        View.hide([userDropDown, albumDropDown, postDropDown]);
+        this.getData(Model.userUrl).then(users =>{
+            userSelect = users.map(user => `<option value=${user.id}>${user.name}</option>`).join('');
+            userDropDown.innerHTML += userSelect;
+        })
+        View.hide([userDropDown.parentElement, albumDropDown.parentElement, postDropDown.parentElement]);
         this.users(Model.userUrl);
 
 
