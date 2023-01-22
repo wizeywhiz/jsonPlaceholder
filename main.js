@@ -23,11 +23,9 @@ filterForm['formSubmit'].addEventListener('click', e => {
         if(userDropDown.value !== 'Select'){
             Model.albumUrlFil = Model.userUrl + `/${userDropDown.value}/albums`;
             Controller.albums(Model.albumUrlFil);
-            console.log('album.notselect');
         }else if(idList.value !== 'Select'){
             Model.albumUrlFil = Model.albumUrl + `/${idList.value}`;
             Controller.albums(Model.albumUrlFil);
-            console.log('album.notselect');
         }
         break;
     
@@ -70,7 +68,6 @@ filterForm['formSubmit'].addEventListener('click', e => {
 
 navLinks.addEventListener('click',(e)=>{
     activeTab = e.target.textContent;
-    console.log(e.target.textContent);
     for (child of navLinks.children){
         if (child.classList.contains('active-nav')){
             child.classList.remove('active-nav');
@@ -118,7 +115,7 @@ navLinks.addEventListener('click',(e)=>{
             View.show([postDropDown.parentElement]);
             Controller.comments(Model.commentUrl);
             break;
-        default: console.log('clicked', e.target.textContent);
+        default: console.log('');
 
     }
 });
@@ -160,12 +157,10 @@ let View = {
     render(element, content, attributes={}){
         let attrkeys = Object.keys(attributes);
         for (key in attrkeys){
-            console.log(key,attributes.key);
             element.setAttribute(key,attributes.key);
         }
         
         element.innerHTML = content;
-        console.log(attributes.keys());
         // if (attributes != {}){
         //     for (const key in attributes.keys()){
         //         // element.children.setAttribute(key,attribute[key]);
@@ -202,8 +197,6 @@ let Controller = {
         displayDiv.innerHTML = '<div><h2>Filtered Users</h2></div>'+userlist;
         }
 
-    //     ulist = document.getElementsByClassName('users-list');
-    // console.log(ulist);
     
     
     });
@@ -214,10 +207,8 @@ let Controller = {
 
     userDetails(){
         let userList = document.querySelectorAll('#general-display > div');
-        console.log(userList);
         userList.forEach(user =>{
             user.addEventListener('click',function(){
-                    console.log(user.id);
                     detailDisp.classList.add('active-display');
             Controller.getData(Model.userUrl +'/' + user.id).then(userDetails => {
                 let details = `<div class="detailDisp">
@@ -249,7 +240,6 @@ let Controller = {
             
 
                 document.querySelector('#detail-display > #closebtn').addEventListener('click', ()=>{
-                    console.log(detailDisp.firstElementChild);
                     let initialDisp = detailDisp.firstElementChild;
                     detailDisp.innerHTML = '';
                     detailDisp.append(initialDisp);
@@ -274,12 +264,10 @@ let Controller = {
         
         this.getData(url).then(allAlbums => {
             if(this.isArray(allAlbums)){
-                console.log(allAlbums);
         let albumList =  allAlbums.map(album =>  `<div class="list album-list"><h3>${album.title}</h3><p>Album by user with Id: 
         ${album.userId}
         </p></div>`).join('');
-        // displayDiv.innerHTML = albumList;
-        console.log(idList.firstChild);
+        
         idList.innerHTML = `<option value="Select">Select Id</option>`
         idDropDown.innerHTML += allAlbums.map(album => `<option value="${album.id}">${album.id}</option>`).join('');
         View.show([displayDiv]);
@@ -313,7 +301,6 @@ let Controller = {
             idList.innerHTML = `<option value="Select">Select Id</option>`
             if (this.isArray(allPhoto)){
                 idDropDown.innerHTML += allPhoto.map(photo => `<option value="${photo.id}">${photo.id}</option>`).join('');
-                console.log(allPhoto);
         let photoList =  allPhoto.map(photo =>  `<div class="photo-list list"><h3>${photo.title}</h3><div><img src="${photo.thumbnailUrl}" alt="Pics not foung">
         </div></div>`).join('');
         displayDiv.innerHTML = '<div><h2>All Photo</h2></div>'+photoList;
@@ -334,7 +321,6 @@ let Controller = {
             idList.innerHTML = `<option value="Select">Select Id</option>`
             if(this.isArray(allPost)){
                 idDropDown.innerHTML += allPost.map(post => `<option value="${post.id}">${post.id}</option>`).join('');
-                console.log(allPost);
         let postList =  allPost.map(post =>  `<div class="list post-list" id="${post.id}"><h3>${post.title}</h3><p>Post by user with Id: 
         ${post.userId}
         </p>
@@ -362,10 +348,8 @@ let Controller = {
         console.log(postList);
         postList.forEach(post =>{
             post.addEventListener('click',function(clickedPost){
-                    console.log(post.id);
             Controller.getData(Model.postUrl +'/' + post.id + '/comments').then(postComments => {
                 if(Controller.isArray(postComments)){
-                    console.log('we got an array');
                    let comments = postComments.map(comment =>{
                         `<div>
                         <span>${comment.name}</span>
@@ -395,7 +379,6 @@ let Controller = {
             
 
                 document.querySelector('#detail-display > #closebtn').addEventListener('click', ()=>{
-                    console.log(detailDisp.firstElementChild);
                     let initialDisp = detailDisp.firstElementChild;
                     detailDisp.innerHTML = '';
                     detailDisp.append(initialDisp);
@@ -468,7 +451,6 @@ let Controller = {
     async getData(url){
         
       let response = await fetch(url).then(e => e.json());
-      console.log(response, 'this is resposnse');
        return response;
 
     }
