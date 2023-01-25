@@ -293,25 +293,71 @@ let Controller = {
 
     },
     
-    photos(url){
+    async photos(url){
         View.hide([detailDisp]);
         this.filterReset();
         View.show([displayDiv]);
-        this.getData(url).then(allPhoto => {
+        await this.getData(url).then(allPhoto => {
             idList.innerHTML = `<option value="Select">Select Id</option>`
             if (this.isArray(allPhoto)){
                 idDropDown.innerHTML += allPhoto.map(photo => `<option value="${photo.id}">${photo.id}</option>`).join('');
-        let photoList =  allPhoto.map(photo =>  `<div class="photo-list list"><h3>${photo.title}</h3><div><img src="${photo.thumbnailUrl}" alt="Pics not foung">
+        let photoList =  allPhoto.map(photo =>  `<div class="photo-list list" id="${photo.id + ''}"><h3>${photo.title}</h3><div><img src="${photo.thumbnailUrl}" alt="Pics not found">
         </div></div>`).join('');
         displayDiv.innerHTML = '<div><h2>All Photo</h2></div>'+photoList;
             }else{
-                let photoList =  `<div class="photo-list list"><h3>${allPhoto.title}</h3><div><img src="${allPhoto.thumbnailUrl}" alt="Pics not found">
+                let photoList =  `<div class="photo-list list" id="${allPhoto.id + ''}"><h3>${allPhoto.title}</h3><div><img src="${allPhoto.thumbnailUrl}" alt="Pics not found">
         </div></div>`;
         displayDiv.innerHTML = '<div><h2>Filtered Photo</h2></div>'+photoList;
             }
             
         });
+        this.photoDetails();
     },
+
+    photoDetails(){
+        let photoList = document.querySelectorAll('#general-display > div');
+        photoList.forEach(photo =>{
+            photo.addEventListener('click',function(){
+                    detailDisp.classList.add('active-display');
+            Controller.getData(Model.photoUrl +'/' + photo.id).then(photoDetails => {
+                let details = `<div>
+                <h4>${(async ()=>{
+                    let albumTitle = await Controller.getData(Model.albumUrl + `/${photoDetails.albumId}`).then(res => {
+                        console.log(res.title);
+                        return res.title})
+                    return albumTitle;})()}</h4>
+
+                <div style="text-align:center;">
+                <img src="${photoDetails.url}" alt="picture not found">
+                <h2>${photoDetails.title}</h2>
+                </div>
+
+                </div>`;
+
+                detailDisp.innerHTML += details;
+                View.show([detailDisp]);
+
+                // adding maps to the details
+                // Initialize and add the map
+            
+
+                document.querySelector('#detail-display > #closebtn').addEventListener('click', ()=>{
+                    let initialDisp = detailDisp.firstElementChild;
+                    detailDisp.innerHTML = '';
+                    detailDisp.append(initialDisp);
+                    View.hide([detailDisp]);
+                    View.show([displayDiv]);
+                })
+                View.hide([displayDiv]);
+
+
+                
+    })})})
+
+  
+
+    },
+
 
     posts(url, filtername=''){
         View.hide([detailDisp]);
